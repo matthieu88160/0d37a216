@@ -1,0 +1,4 @@
+MYSQL_ROOT_PASSWORD=1nterNati0n
+MYSQL_USER=app
+MYSQL_PASSWORD=1nterNati0napp
+MYSQL_DATABASE=internation

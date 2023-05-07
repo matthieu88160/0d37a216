@@ -1,0 +1,43 @@
+version: "3.3"
+
+volumes:
+    data_layer_data:
+
+    app_logs:
+
+    app_cache:
+
+services:
+    data:
+        image: mysql:8
+        container_name: internation_data
+        volumes:
+            - data_layer_data:/var/lib/mysql
+        ports:
+            - "${DB_OUTPUT_PORT}:3306"
+        env_file:
+            - ./.db_env
+
+    app:
+        build: Apache
+        working_dir: /var/www
+        user: www-data
+        volumes:
+            - ./App:/var/www
+            - ./App/public:/var/www/html
+            - app_logs:/app/var/log
+            - app_cache:/app/var/cache
+        ports:
+            - "${APP_OUTPUT_PORT}:80"
+        env_file:
+            - .app_env
+
+    installer:
+        build: ./InstallerBuild
+        entrypoint: "composer install"
+        env_file:
+            - .app_env
+        volumes:
+            - ./App:/app
+            - app_logs:/app/var/log
+            - app_cache:/app/var/cache
